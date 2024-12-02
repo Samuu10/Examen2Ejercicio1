@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teal_700">
+
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GESTIÓN DE HORARIO"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titulo"
+        android:layout_above="@id/bottom_buttons"
+        android:layout_margin="20dp" />
+
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_agregar_clase"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@color/white"
+            android:text="Añadir Clase"
+            android:padding="10dp"
+            android:textColor="@color/teal_700" />
+
+        <Button
+            android:id="@+id/btn_ver_horario"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@color/white"
+            android:text="Ver Horario"
+            android:padding="10dp"
+            android:textColor="@color/teal_700" />
+
+        <Button
+            android:id="@+id/btn_clase_actual"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="Clase Actual"
+            android:padding="10dp"
+            android:textColor="@color/teal_700" />
+    </LinearLayout>
+
+</RelativeLayout>
