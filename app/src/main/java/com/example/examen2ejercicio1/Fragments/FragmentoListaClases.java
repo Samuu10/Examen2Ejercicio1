@@ -61,6 +61,7 @@ public class FragmentoListaClases extends Fragment {
     private void cargarClases(String diaSemana) {
         List<Clase> listaClases = preferencesManager.cargarClases().get(diaSemana);
         if (listaClases != null) {
+            //Ordenamos las clases por hora de inicio
             Collections.sort(listaClases, (clase1, clase2) -> {
                 int hora1 = Integer.parseInt(clase1.getHora().split(":")[0]);
                 int hora2 = Integer.parseInt(clase2.getHora().split(":")[0]);
