@@ -47,9 +47,12 @@ public class AdaptadorClase extends RecyclerView.Adapter<AdaptadorClase.ClaseVie
 
     //Clase ClaseViewHolder que extiende RecyclerView.ViewHolder y se utiliza para mantener las referencias de los elementos de la vista
     public static class ClaseViewHolder extends RecyclerView.ViewHolder {
+
+        //Variables
         TextView nombreTextView;
         TextView horaTextView;
 
+        //Constructor
         public ClaseViewHolder(@NonNull View itemView) {
             super(itemView);
             nombreTextView = itemView.findViewById(R.id.nombre_clase);

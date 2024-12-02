@@ -15,16 +15,19 @@ import com.example.examen2ejercicio1.R;
 import java.util.ArrayList;
 import java.util.List;
 
+//Fragmento principal que muestra el horario de clases de la semana
 public class FragmentoVerHorario extends Fragment {
 
     //Variables
     private Spinner diaSemana;
 
+    //Metodo para crear la vista del fragmento
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmento_ver_horario, container, false);
 
+        //Inicializamos las variables
         diaSemana = view.findViewById(R.id.sp_dia_semana);
 
         // Configurar Spinner con los días de la semana
@@ -35,10 +38,12 @@ public class FragmentoVerHorario extends Fragment {
         diasSemana.add("Jueves");
         diasSemana.add("Viernes");
 
+        //Configuramos un adaptador para el Spinner con los días de la semana
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, diasSemana);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         diaSemana.setAdapter(adapter);
 
+        //Mostrar la lista de clases del día seleccionado
         diaSemana.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -50,12 +55,13 @@ public class FragmentoVerHorario extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // Mostrar la lista de clases del día actual al iniciar
+        //Mostramos la lista de clases del dia de la semana actual
         mostrarListaClases(diasSemana.get(0));
 
         return view;
     }
 
+    //Metodo para mostrar la lista de clases del día de la semana seleccionado
     private void mostrarListaClases(String diaSemana) {
         FragmentoListaClases fragmentoListaClases = FragmentoListaClases.newInstance(diaSemana);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();

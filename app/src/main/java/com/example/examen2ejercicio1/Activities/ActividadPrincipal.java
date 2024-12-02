@@ -9,6 +9,7 @@ import com.example.examen2ejercicio1.Fragments.FragmentoClaseActual;
 import com.example.examen2ejercicio1.Fragments.FragmentoVerHorario;
 import com.example.examen2ejercicio1.R;
 
+//Actividad principal de la aplicación
 public class ActividadPrincipal extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

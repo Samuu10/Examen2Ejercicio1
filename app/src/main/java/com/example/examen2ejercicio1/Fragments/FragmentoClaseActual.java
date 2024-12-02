@@ -10,9 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.example.examen2ejercicio1.GestionClases.Clase;
-import com.example.examen2ejercicio1.GestionClases.PreferencesManager;
+import com.example.examen2ejercicio1.Utils.PreferencesManager;
 import com.example.examen2ejercicio1.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,11 +37,13 @@ public class FragmentoClaseActual extends Fragment {
         }
     };
 
+    //Metodo para crear la vista del fragmento
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmento_clase_actual, container, false);
 
+        //Inicializamos las variables
         tvHoraActual = view.findViewById(R.id.tv_hora_actual);
         tvNombreClase = view.findViewById(R.id.tv_nombre_clase);
         tvHorarioClase = view.findViewById(R.id.tv_horario_clase);
@@ -59,7 +60,7 @@ public class FragmentoClaseActual extends Fragment {
         protected String[] doInBackground(Void... voids) {
             String dateTime = obtenerFechaHora();
             Clase claseActual = obtenerClaseActual();
-            String nombreClase = claseActual != null ? claseActual.getNombre() : "No hay clase";
+            String nombreClase = claseActual != null ? claseActual.getNombre() : "No tienes clase ahora";
             String horarioClase = claseActual != null ? claseActual.getHora() + " - " + (Integer.parseInt(claseActual.getHora().split(":")[0]) + 1) + ":00" : "";
             return new String[]{dateTime, nombreClase, horarioClase};
         }
@@ -72,12 +73,14 @@ public class FragmentoClaseActual extends Fragment {
         }
     }
 
+    //Metodo para obtener la clase que se está impartiendo en ese momento
     private Clase obtenerClaseActual() {
         Calendar calendar = Calendar.getInstance();
         String diaSemana = new SimpleDateFormat("EEEE", new Locale("es", "ES")).format(calendar.getTime());
         int horaActual = calendar.get(Calendar.HOUR_OF_DAY);
 
-        Map<String, List<Clase>> clasesMap = preferencesManager.loadClases();
+        //Obtenemos las clases del día actual
+        Map<String, List<Clase>> clasesMap = preferencesManager.cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);
         if (clasesDelDia != null) {
             for (Clase clase : clasesDelDia) {

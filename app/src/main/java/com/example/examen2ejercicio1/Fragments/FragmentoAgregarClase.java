@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.examen2ejercicio1.GestionClases.*;
 import com.example.examen2ejercicio1.R;
+import com.example.examen2ejercicio1.Utils.PreferencesManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +30,13 @@ public class FragmentoAgregarClase extends Fragment {
     private TimePicker hora;
     private PreferencesManager preferencesManager;
 
+    //Metodo para crear la vista del fragmento
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmento_agregar_clase, container, false);
 
+        //Inicializamos las variables
         nombre = view.findViewById(R.id.et_nombre_asignatura);
         dia = view.findViewById(R.id.sp_dia_semana);
         hora = view.findViewById(R.id.tp_hora_asignatura);
@@ -69,20 +72,23 @@ public class FragmentoAgregarClase extends Fragment {
         return view;
     }
 
+    //Metodo para agregar una nueva clase al horario
     private void agregarClase() {
         String nombreAsignatura = nombre.getText().toString().trim();
         String diaSemana = dia.getSelectedItem().toString();
         int hora = this.hora.getHour();
 
+        //Validamos que los campos no estén vacíos
         if (nombreAsignatura.isEmpty() || diaSemana.isEmpty()) {
             Toast.makeText(getContext(), "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //Creamos una nueva clase con los datos ingresados
         Clase nuevaClase = new Clase(nombreAsignatura, diaSemana, hora + ":00");
 
         //Aseguramos que no haya otra clase a la misma hora
-        Map<String, List<Clase>> clasesMap = preferencesManager.loadClases();
+        Map<String, List<Clase>> clasesMap = preferencesManager.cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);
         if (clasesDelDia != null) {
             for (Clase clase : clasesDelDia) {
@@ -93,13 +99,15 @@ public class FragmentoAgregarClase extends Fragment {
             }
         }
 
+        //Guardamos la nueva clase en el horario
         new SaveClaseTask().execute(nuevaClase);
     }
 
+    //Clase AsyncTask para guardar la nueva clase en segundo plano
     private class SaveClaseTask extends AsyncTask<Clase, Void, Void> {
         @Override
         protected Void doInBackground(Clase... clases) {
-            preferencesManager.saveClase(clases[0]);
+            preferencesManager.guardarClase(clases[0]);
             return null;
         }
 
@@ -111,7 +119,7 @@ public class FragmentoAgregarClase extends Fragment {
         }
     }
 
-    //Metodo para cancelar la operación y volver al fragmento inicial
+    //Metodo para cancelar la acción y volver al fragmento inicial
     private void cancelar() {
         getParentFragmentManager().popBackStack();
     }
