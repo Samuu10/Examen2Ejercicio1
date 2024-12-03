@@ -1,5 +1,9 @@
 package com.example.examen2ejercicio1.Fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.examen2ejercicio1.GestionClases.BroadcastClase;
 import com.example.examen2ejercicio1.GestionClases.Clase;
 import com.example.examen2ejercicio1.Utils.PreferencesManager;
 import com.example.examen2ejercicio1.R;
@@ -20,13 +26,14 @@ import java.util.Locale;
 import java.util.Map;
 
 //Fragmento que muestra la fecha y hora actuales y muestra que clase se está impartiendo en ese momento
-public class FragmentoClaseActual extends Fragment {
+public class FragmentoClaseActual extends Fragment implements BroadcastClase.BroadcastListener {
 
     //Variables
     private TextView tvHoraActual;
     private TextView tvNombreClase;
     private TextView tvHorarioClase;
     private PreferencesManager preferencesManager;
+    private BroadcastReceiver claseBroadcastReceiver;
     private Handler handler = new Handler();
     private Runnable runnable = new Runnable() {
         @Override
@@ -50,6 +57,10 @@ public class FragmentoClaseActual extends Fragment {
         preferencesManager = new PreferencesManager(getContext());
 
         handler.post(runnable);
+
+        // Register the broadcast receiver
+        claseBroadcastReceiver = new BroadcastClase();
+        getContext().registerReceiver(claseBroadcastReceiver, new IntentFilter(BroadcastClase.ACTION_CLASES_UPDATED), Context.RECEIVER_NOT_EXPORTED);
 
         return view;
     }
@@ -78,14 +89,20 @@ public class FragmentoClaseActual extends Fragment {
         Calendar calendar = Calendar.getInstance();
         String diaSemana = new SimpleDateFormat("EEEE", new Locale("es", "ES")).format(calendar.getTime());
         int horaActual = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutoActual = calendar.get(Calendar.MINUTE);
 
         //Obtenemos las clases del día actual
         Map<String, List<Clase>> clasesMap = preferencesManager.cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);
         if (clasesDelDia != null) {
             for (Clase clase : clasesDelDia) {
-                int horaClase = Integer.parseInt(clase.getHora().split(":")[0]);
-                if (horaClase == horaActual) {
+                String[] horaClaseParts = clase.getHora().split(":");
+                int horaClase = Integer.parseInt(horaClaseParts[0]);
+                int minutoClase = Integer.parseInt(horaClaseParts[1]);
+
+                if (horaActual == horaClase && minutoActual >= minutoClase) {
+                    return clase;
+                } else if (horaActual == horaClase + 1 && minutoActual < minutoClase) {
                     return clase;
                 }
             }
@@ -121,5 +138,18 @@ public class FragmentoClaseActual extends Fragment {
     public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+    }
+
+    //Metodo para detener la actualización de la hora cuando el fragmento sea destruido
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getContext().unregisterReceiver(claseBroadcastReceiver);
+    }
+
+    //Metodo para actualizar la hora cuando se actualicen las clases
+    @Override
+    public void onClasesUpdated() {
+        new GetDateTimeTask().execute();
     }
 }

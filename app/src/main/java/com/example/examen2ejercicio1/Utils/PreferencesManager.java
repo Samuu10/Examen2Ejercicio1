@@ -50,4 +50,16 @@ public class PreferencesManager {
         editor.putString(KEY_CLASES, json);
         editor.apply();
     }
+
+    public void eliminarClase(Clase clase, String diaSemana) {
+        Map<String, List<Clase>> clasesMap = cargarClases();
+        List<Clase> clasesDelDia = clasesMap.get(diaSemana);
+        if (clasesDelDia != null) {
+            clasesDelDia.remove(clase);
+            if (clasesDelDia.isEmpty()) {
+                clasesMap.remove(diaSemana);
+            }
+            almacenarClases(clasesMap);
+        }
+    }
 }

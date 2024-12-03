@@ -1,6 +1,7 @@
 package com.example.examen2ejercicio1.Fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,16 +60,35 @@ public class FragmentoListaClases extends Fragment {
 
     //Metodo para cargar las clases del día de la semana seleccionado en el RecyclerView del fragmento
     private void cargarClases(String diaSemana) {
-        List<Clase> listaClases = preferencesManager.cargarClases().get(diaSemana);
-        if (listaClases != null) {
-            //Ordenamos las clases por hora de inicio
+        listaClases = preferencesManager.cargarClases().get(diaSemana);
+        if (listaClases == null) {
+            listaClases = new ArrayList<>();
+        } else {
             Collections.sort(listaClases, (clase1, clase2) -> {
                 int hora1 = Integer.parseInt(clase1.getHora().split(":")[0]);
                 int hora2 = Integer.parseInt(clase2.getHora().split(":")[0]);
                 return Integer.compare(hora1, hora2);
             });
         }
-        adaptadorClase = new AdaptadorClase(getContext(), listaClases != null ? listaClases : new ArrayList<>());
+
+        adaptadorClase = new AdaptadorClase(getContext(), listaClases);
         recyclerView.setAdapter(adaptadorClase);
+
+        adaptadorClase.setOnItemClickListener(clase -> mostrarDialogoConfirmacion(clase, diaSemana));
+    }
+
+    private void mostrarDialogoConfirmacion(Clase clase, String diaSemana) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Eliminar Clase")
+                .setMessage("¿Estás seguro de que deseas eliminar esta clase del horario?")
+                .setPositiveButton("Aceptar", (dialog, which) -> eliminarClase(clase, diaSemana))
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void eliminarClase(Clase clase, String diaSemana) {
+        listaClases.remove(clase);
+        preferencesManager.eliminarClase(clase, diaSemana);
+        adaptadorClase.notifyDataSetChanged();
     }
 }

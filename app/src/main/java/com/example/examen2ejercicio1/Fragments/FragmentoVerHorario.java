@@ -12,8 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.examen2ejercicio1.R;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 //Fragmento principal que muestra el horario de clases de la semana
 public class FragmentoVerHorario extends Fragment {
@@ -56,7 +60,16 @@ public class FragmentoVerHorario extends Fragment {
         });
 
         //Mostramos la lista de clases del dia de la semana actual
-        mostrarListaClases(diasSemana.get(0));
+        Calendar calendar = Calendar.getInstance();
+        String diaActual = new SimpleDateFormat("EEEE", new Locale("es", "ES")).format(calendar.getTime());
+        int index = diasSemana.indexOf(capitalize(diaActual));
+        if (index != -1) {
+            diaSemana.setSelection(index);
+            mostrarListaClases(diasSemana.get(index));
+        } else {
+            diaSemana.setSelection(0);
+            mostrarListaClases(diasSemana.get(0));
+        }
 
         return view;
     }
@@ -67,5 +80,13 @@ public class FragmentoVerHorario extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container_lista_clases, fragmentoListaClases);
         transaction.commit();
+    }
+
+    //Metodo para capitalizar la primera letra de una cadena
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 }

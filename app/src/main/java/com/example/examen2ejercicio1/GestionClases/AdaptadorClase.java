@@ -16,11 +16,20 @@ public class AdaptadorClase extends RecyclerView.Adapter<AdaptadorClase.ClaseVie
     //Variables
     private Context context;
     private List<Clase> clases;
+    private OnItemClickListener onItemClickListener;
 
     //Constructor
     public AdaptadorClase(Context context, List<Clase> clases) {
         this.context = context;
         this.clases = clases;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Clase clase);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     //Metodo para crear una nueva vista
@@ -37,6 +46,12 @@ public class AdaptadorClase extends RecyclerView.Adapter<AdaptadorClase.ClaseVie
         Clase clase = clases.get(position);
         holder.nombreTextView.setText(clase.getNombre());
         holder.horaTextView.setText(clase.getHora() + "h");
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(clase);
+            }
+        });
     }
 
     //Metodo para obtener el número de elementos en la lista
