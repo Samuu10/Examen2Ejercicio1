@@ -1,9 +1,6 @@
 package com.example.examen2ejercicio1.Fragments;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.examen2ejercicio1.GestionClases.BroadcastClase;
 import com.example.examen2ejercicio1.R;
 
 import java.text.SimpleDateFormat;
@@ -78,23 +74,12 @@ public class FragmentoVerHorario extends Fragment {
             mostrarListaClases(diasSemana.get(0));
         }
 
-        clasesUpdatedReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (BroadcastClase.ACTION_CLASES_UPDATED.equals(intent.getAction())) {
-                    mostrarListaClases(diaSemana.getSelectedItem().toString());
-                }
-            }
-        };
-        getContext().registerReceiver(clasesUpdatedReceiver, new IntentFilter(BroadcastClase.ACTION_CLASES_UPDATED), Context.RECEIVER_NOT_EXPORTED);
-
         return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getContext().unregisterReceiver(clasesUpdatedReceiver);
     }
 
     //Metodo para mostrar la lista de clases del día de la semana seleccionado

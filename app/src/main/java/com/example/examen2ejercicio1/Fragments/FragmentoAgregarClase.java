@@ -111,8 +111,6 @@ public class FragmentoAgregarClase extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             Toast.makeText(getContext(), "Clase agregada al horario", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(BroadcastClase.ACTION_CLASES_UPDATED);
-            getContext().sendBroadcast(intent);
             getParentFragmentManager().popBackStack();
         }
     }
