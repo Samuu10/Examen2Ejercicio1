@@ -33,7 +33,7 @@ public class PreferencesManager {
             clasesMap.put(clase.getDia(), new ArrayList<>());
         }
         clasesMap.get(clase.getDia()).add(clase);
-        almacenarClases(clasesMap);
+        guardarClases(clasesMap);
     }
 
     //Metodo para cargar las clases de SharedPreferences
@@ -43,8 +43,9 @@ public class PreferencesManager {
         return json != null ? gson.fromJson(json, type) : new HashMap<>();
     }
 
+
     //Metodo para almacenar las clases en SharedPreferences
-    private void almacenarClases(Map<String, List<Clase>> clasesMap) {
+    public void guardarClases(Map<String, List<Clase>> clasesMap) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(clasesMap);
         editor.putString(KEY_CLASES, json);
@@ -55,11 +56,13 @@ public class PreferencesManager {
         Map<String, List<Clase>> clasesMap = cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);
         if (clasesDelDia != null) {
-            clasesDelDia.remove(clase);
+            clasesDelDia.removeIf(c -> c.getNombre().equals(clase.getNombre()) && c.getHora().equals(clase.getHora()));
             if (clasesDelDia.isEmpty()) {
                 clasesMap.remove(diaSemana);
+            } else {
+                clasesMap.put(diaSemana, clasesDelDia);
             }
-            almacenarClases(clasesMap);
+            guardarClases(clasesMap);
         }
     }
 }

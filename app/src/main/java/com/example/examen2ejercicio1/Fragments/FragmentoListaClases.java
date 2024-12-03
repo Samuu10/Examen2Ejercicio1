@@ -27,6 +27,7 @@ public class FragmentoListaClases extends Fragment {
     private AdaptadorClase adaptadorClase;
     private List<Clase> listaClases;
     private PreferencesManager preferencesManager;
+    private String diaSemana;
 
     //Metodo para crear una nueva instancia del fragmento
     public static FragmentoListaClases newInstance(String diaSemana) {
@@ -44,18 +45,21 @@ public class FragmentoListaClases extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmento_lista_clases, container, false);
 
-        //Inicializamos las variables
         recyclerView = view.findViewById(R.id.recycler_view_clases);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         preferencesManager = new PreferencesManager(getContext());
 
-        //Cargamos las clases del día de la semana seleccionado
         if (getArguments() != null) {
-            String diaSemana = getArguments().getString(ARG_DIA_SEMANA);
-            cargarClases(diaSemana);
+            diaSemana = getArguments().getString(ARG_DIA_SEMANA);
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cargarClases(diaSemana);
     }
 
     //Metodo para cargar las clases del día de la semana seleccionado en el RecyclerView del fragmento

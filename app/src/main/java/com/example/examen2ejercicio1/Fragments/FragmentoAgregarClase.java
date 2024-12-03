@@ -79,16 +79,13 @@ public class FragmentoAgregarClase extends Fragment {
         String diaSemana = dia.getSelectedItem().toString();
         int hora = this.hora.getHour();
 
-        //Validamos que los campos no estén vacíos
         if (nombreAsignatura.isEmpty() || diaSemana.isEmpty()) {
             Toast.makeText(getContext(), "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //Creamos una nueva clase con los datos ingresados
         Clase nuevaClase = new Clase(nombreAsignatura, diaSemana, hora + ":00");
 
-        //Aseguramos que no haya otra clase a la misma hora
         Map<String, List<Clase>> clasesMap = preferencesManager.cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);
         if (clasesDelDia != null) {
@@ -100,7 +97,6 @@ public class FragmentoAgregarClase extends Fragment {
             }
         }
 
-        //Guardamos la nueva clase en el horario
         new SaveClaseTask().execute(nuevaClase);
     }
 
@@ -112,7 +108,6 @@ public class FragmentoAgregarClase extends Fragment {
             return null;
         }
 
-        //Enseñamos un mensaje de confirmación y volvemos al fragmento inicial
         @Override
         protected void onPostExecute(Void aVoid) {
             Toast.makeText(getContext(), "Clase agregada al horario", Toast.LENGTH_SHORT).show();
