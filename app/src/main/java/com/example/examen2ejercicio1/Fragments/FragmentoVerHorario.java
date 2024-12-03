@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-//Fragmento principal que muestra el horario de clases de la semana
+//Fragmento principal que muestra el horario de clases de la semana por días
 public class FragmentoVerHorario extends Fragment {
 
     //Variables
@@ -37,7 +37,7 @@ public class FragmentoVerHorario extends Fragment {
         //Inicializamos las variables
         diaSemana = view.findViewById(R.id.sp_dia_semana);
 
-        // Configurar Spinner con los días de la semana
+        //Configuramos Spinner con los días de la semana
         List<String> diasSemana = new ArrayList<>();
         diasSemana.add("Lunes");
         diasSemana.add("Martes");
@@ -50,7 +50,7 @@ public class FragmentoVerHorario extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         diaSemana.setAdapter(adapter);
 
-        //Mostrar la lista de clases del día seleccionado
+        //Mostramos la lista de clases del día seleccionado
         diaSemana.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -77,6 +77,7 @@ public class FragmentoVerHorario extends Fragment {
         return view;
     }
 
+    //Metodo que se ejecuta al destruir la vista del fragmento
     @Override
     public void onDestroyView() {
         super.onDestroyView();

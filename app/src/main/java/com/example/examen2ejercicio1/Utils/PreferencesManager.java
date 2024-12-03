@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//Clase PreferencesManager que se utiliza para gestionar las preferencias de la aplicación y almacenar las clases en el SharedPreferences
+//Clase PreferencesManager que se utiliza para gestionar las preferencias de la aplicación y almacenar las clases en SharedPreferences
 public class PreferencesManager {
 
     //Variables
@@ -52,6 +52,7 @@ public class PreferencesManager {
         editor.apply();
     }
 
+    //Metodo para eliminar una clase de SharedPreferences
     public void eliminarClase(Clase clase, String diaSemana) {
         Map<String, List<Clase>> clasesMap = cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);

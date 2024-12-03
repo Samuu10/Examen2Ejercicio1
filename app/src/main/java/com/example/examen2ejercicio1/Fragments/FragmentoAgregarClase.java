@@ -1,6 +1,5 @@
 package com.example.examen2ejercicio1.Fragments;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -44,7 +43,7 @@ public class FragmentoAgregarClase extends Fragment {
         hora.setIs24HourView(true);
         preferencesManager = new PreferencesManager(getContext());
 
-        //Configuramos el TimePicker para que solo se puedan seleccionar horas en punto
+        //Configuramos el TimePicker para que solo se puedan seleccionar horas en punto (XX:00)
         hora.setOnTimeChangedListener((view1, hourOfDay, minute) -> {
             if (minute != 0) {
                 hora.setMinute(0);
@@ -79,6 +78,7 @@ public class FragmentoAgregarClase extends Fragment {
         String diaSemana = dia.getSelectedItem().toString();
         int hora = this.hora.getHour();
 
+        //Si alguno de los campos está vacío, mostramos un mensaje de error
         if (nombreAsignatura.isEmpty() || diaSemana.isEmpty()) {
             Toast.makeText(getContext(), "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
@@ -86,6 +86,7 @@ public class FragmentoAgregarClase extends Fragment {
 
         Clase nuevaClase = new Clase(nombreAsignatura, diaSemana, hora + ":00");
 
+        //Comprobamos si ya existe una clase a esa hora en el horario y mostramos un mensaje de error
         Map<String, List<Clase>> clasesMap = preferencesManager.cargarClases();
         List<Clase> clasesDelDia = clasesMap.get(diaSemana);
         if (clasesDelDia != null) {
@@ -100,7 +101,7 @@ public class FragmentoAgregarClase extends Fragment {
         new SaveClaseTask().execute(nuevaClase);
     }
 
-    //Clase AsyncTask para guardar la nueva clase en segundo plano
+    //Clase AsyncTask para guardar la nueva clase en shared preferences en segundo plano
     private class SaveClaseTask extends AsyncTask<Clase, Void, Void> {
         @Override
         protected Void doInBackground(Clase... clases) {

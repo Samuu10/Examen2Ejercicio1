@@ -45,10 +45,12 @@ public class FragmentoListaClases extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmento_lista_clases, container, false);
 
+        //Inicializamos las variables
         recyclerView = view.findViewById(R.id.recycler_view_clases);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         preferencesManager = new PreferencesManager(getContext());
 
+        //Si se han pasado argumentos al fragmento, se obtiene el día de la semana seleccionado
         if (getArguments() != null) {
             diaSemana = getArguments().getString(ARG_DIA_SEMANA);
         }
@@ -56,6 +58,7 @@ public class FragmentoListaClases extends Fragment {
         return view;
     }
 
+    //Metodo que se ejecuta al reanudar el fragmento
     @Override
     public void onResume() {
         super.onResume();
@@ -81,6 +84,7 @@ public class FragmentoListaClases extends Fragment {
         adaptadorClase.setOnItemClickListener(clase -> mostrarDialogoConfirmacion(clase, diaSemana));
     }
 
+    //Metodo para mostrar un dialogo de confirmación al eliminar una clase del horario cuando se pulsa sobre ella
     private void mostrarDialogoConfirmacion(Clase clase, String diaSemana) {
         new AlertDialog.Builder(getContext())
                 .setTitle("Eliminar Clase")
@@ -90,6 +94,7 @@ public class FragmentoListaClases extends Fragment {
                 .show();
     }
 
+    //Metodo para eliminar una clase del horario pulsando sobre ella
     private void eliminarClase(Clase clase, String diaSemana) {
         listaClases.remove(clase);
         preferencesManager.eliminarClase(clase, diaSemana);

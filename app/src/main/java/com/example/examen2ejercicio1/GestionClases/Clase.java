@@ -3,7 +3,7 @@ package com.example.examen2ejercicio1.GestionClases;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//Clase que representa un objeto Clase y que implementa Parcelable para pasar objetos entre actividades
+//Clase que representa un objeto Clase y que implementa Parcelable para pasar objetos entre actividades y fragmentos
 public class Clase implements Parcelable {
 
     //Atributos

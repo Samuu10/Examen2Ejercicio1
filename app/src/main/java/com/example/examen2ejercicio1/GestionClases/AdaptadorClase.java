@@ -24,10 +24,12 @@ public class AdaptadorClase extends RecyclerView.Adapter<AdaptadorClase.ClaseVie
         this.clases = clases;
     }
 
+    //Interfaz OnItemClickListener que se utiliza para gestionar los eventos de click en los elementos de la lista
     public interface OnItemClickListener {
         void onItemClick(Clase clase);
     }
 
+    //Metodo para establecer el listener de los eventos de click
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
